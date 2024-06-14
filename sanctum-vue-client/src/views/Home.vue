@@ -1,21 +1,27 @@
 <script setup>
 import axios from "axios";
 import { reactive } from "vue";
+import useAuth from "@/composable/useAuth";
+import Navigation from "@/components/Navigation.vue";
 
 const form = reactive({
   email: "admin@admin.com",
   password: "password",
 });
 
-const login = async () => {
-  await axios.get("/sanctum/csrf-cookie");
-  const response = await axios.post("/login", form);
+const { setName } = useAuth();
 
-  console.log(response);
+const login = async () => {
+  //   await axios.get("/sanctum/csrf-cookie");
+  //   const response = await axios.post("/login", form);
+  //   console.log(response);
+
+  setName("John Doe");
 };
 </script>
 
 <template>
+  <Navigation />
   <form action="" method="POST" @submit.prevent="login">
     <input
       v-model="form.email"

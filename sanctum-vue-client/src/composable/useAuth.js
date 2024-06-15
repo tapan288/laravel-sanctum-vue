@@ -19,12 +19,25 @@ export default function useAuth() {
     state.user = user;
   };
 
+  const attempt = async () => {
+    try {
+      let response = await axios.get("api/user");
+
+      setAuthenticated(true);
+      setUser(response.data);
+    } catch (error) {
+      setAuthenticated(false);
+      setUser({});
+    }
+  };
+
   const login = async (form) => {
     await axios.get("/sanctum/csrf-cookie");
 
     try {
       const response = await axios.post("/login", form);
-      console.log(response);
+
+      return attempt();
     } catch (error) {
       console.log(error);
     }
@@ -34,5 +47,6 @@ export default function useAuth() {
     authenticated,
     user,
     login,
+    attempt,
   };
 }

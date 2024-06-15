@@ -1,11 +1,11 @@
 <script setup>
 import useAuth from "../composable/useAuth";
 
-const { getName } = useAuth();
+const { user, authenticated } = useAuth();
 </script>
 
 <template>
-  <div>
-    {{ getName }}
+  <div v-if="authenticated">
+    {{ user.name }}
   </div>
 </template>

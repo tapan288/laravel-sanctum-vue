@@ -51,11 +51,23 @@ export default function useAuth() {
     }
   };
 
+  const logout = async () => {
+    try {
+      await axios.post("logout");
+
+      setAuthenticated(false);
+      setUser({});
+    } catch (error) {
+      return Promise.reject(null);
+    }
+  };
+
   return {
     authenticated,
     user,
     login,
     attempt,
     errors,
+    logout,
   };
 }

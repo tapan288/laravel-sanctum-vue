@@ -8,7 +8,7 @@ const form = reactive({
   password: "password",
 });
 
-const { login: loginAction } = useAuth();
+const { login: loginAction, errors } = useAuth();
 
 const login = async () => {
   loginAction(form);
@@ -25,6 +25,7 @@ const login = async () => {
       id="email"
       placeholder="Email"
     />
+    <p v-if="errors.email">{{ errors.email[0] }}</p>
     <input
       v-model="form.password"
       type="password"
@@ -32,6 +33,7 @@ const login = async () => {
       id="password"
       placeholder="Password"
     />
+    <p v-if="errors.password">{{ errors.password[0] }}</p>
     <button type="submit">Login</button>
   </form>
 </template>

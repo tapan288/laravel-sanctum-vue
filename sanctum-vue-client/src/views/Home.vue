@@ -16,7 +16,6 @@ const login = async () => {
 </script>
 
 <template>
-  <Navigation />
   <form action="" method="POST" @submit.prevent="login">
     <input
       v-model="form.email"

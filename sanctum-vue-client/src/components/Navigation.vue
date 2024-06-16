@@ -1,7 +1,10 @@
 <script setup>
+import { RouterLink } from "vue-router";
 import useAuth from "../composable/useAuth";
+import { ref } from "vue";
 
 const { user, authenticated, logout } = useAuth();
+const mobileNavigation = ref(false);
 </script>
 
 <template>
@@ -14,13 +17,17 @@ const { user, authenticated, logout } = useAuth();
           <span class="text-xl font-bold"> Product Name </span>
         </a>
         <div class="hidden lg:flex lg:gap-x-12">
-          <a href="#" class="text-sm font-semibold leading-6 text-gray-900">
+          <RouterLink
+            :to="{ name: 'dashboard' }"
+            class="text-sm font-semibold leading-6 text-gray-900"
+          >
             Dashboard
-          </a>
+          </RouterLink>
         </div>
       </div>
       <div class="flex lg:hidden">
         <button
+          @click="mobileNavigation = true"
           type="button"
           class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
         >
@@ -43,13 +50,17 @@ const { user, authenticated, logout } = useAuth();
       <div class="hidden lg:flex">
         <div class="flex items-center space-x-6">
           <div class="text-sm font-semibold leading-6 text-gray-900">
-            User name
+            {{ user.name }}
           </div>
-          <button class="text-sm font-semibold leading-6 text-gray-900">
+          <button
+            @click="logout"
+            v-if="authenticated"
+            class="text-sm font-semibold leading-6 text-gray-900"
+          >
             Log out &rarr;
           </button>
         </div>
-        <div>
+        <div v-if="!authenticated">
           <a href="#" class="text-sm font-semibold leading-6 text-gray-900">
             Log in &rarr;
           </a>
@@ -58,7 +69,7 @@ const { user, authenticated, logout } = useAuth();
     </nav>
 
     <!-- Mobile menu -->
-    <div class="lg:hidden">
+    <div class="lg:hidden" v-if="mobileNavigation">
       <div
         class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:ring-1 sm:ring-gray-900/10"
       >
@@ -66,7 +77,11 @@ const { user, authenticated, logout } = useAuth();
           <a href="#" class="-m-1.5 p-1.5">
             <span class="text-xl font-bold"> Product Name </span>
           </a>
-          <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700">
+          <button
+            @click="mobileNavigation = false"
+            type="button"
+            class="-m-2.5 rounded-md p-2.5 text-gray-700"
+          >
             <span class="sr-only">Close menu</span>
             <svg
               class="h-6 w-6"
@@ -86,22 +101,23 @@ const { user, authenticated, logout } = useAuth();
         <div class="mt-6 flow-root">
           <div class="-my-6 divide-y divide-gray-500/10">
             <div class="space-y-2 py-6">
-              <a
-                href="#"
-                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+              <RouterLink
+                :to="{ name: 'dashboard' }"
+                class="text-sm font-semibold leading-6 text-gray-900"
               >
                 Dashboard
-              </a>
+              </RouterLink>
             </div>
             <div class="py-6">
-              <div>
+              <div v-if="authenticated">
                 <button
+                  @click="logout"
                   class="w-full text-left -mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
                   Log out
                 </button>
               </div>
-              <div>
+              <div v-if="!authenticated">
                 <a
                   href="#"
                   class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"

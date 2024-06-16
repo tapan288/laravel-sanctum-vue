@@ -18,6 +18,7 @@ const mobileNavigation = ref(false);
         </a>
         <div class="hidden lg:flex lg:gap-x-12">
           <RouterLink
+            v-if="authenticated"
             :to="{ name: 'dashboard' }"
             class="text-sm font-semibold leading-6 text-gray-900"
           >
@@ -61,9 +62,12 @@ const mobileNavigation = ref(false);
           </button>
         </div>
         <div v-if="!authenticated">
-          <a href="#" class="text-sm font-semibold leading-6 text-gray-900">
+          <RouterLink
+            :to="{ name: 'login' }"
+            class="text-sm font-semibold leading-6 text-gray-900"
+          >
             Log in &rarr;
-          </a>
+          </RouterLink>
         </div>
       </div>
     </nav>
@@ -102,6 +106,7 @@ const mobileNavigation = ref(false);
           <div class="-my-6 divide-y divide-gray-500/10">
             <div class="space-y-2 py-6">
               <RouterLink
+                v-if="authenticated"
                 :to="{ name: 'dashboard' }"
                 class="text-sm font-semibold leading-6 text-gray-900"
               >
@@ -118,12 +123,12 @@ const mobileNavigation = ref(false);
                 </button>
               </div>
               <div v-if="!authenticated">
-                <a
-                  href="#"
-                  class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                <RouterLink
+                  :to="{ name: 'login' }"
+                  class="text-sm font-semibold leading-6 text-gray-900"
                 >
-                  Log in
-                </a>
+                  Log in &rarr;
+                </RouterLink>
               </div>
             </div>
           </div>

@@ -1,5 +1,20 @@
 <script setup>
-//
+import { reactive } from "vue";
+import useAuth from "@/composable/useAuth";
+import router from "@/router";
+
+const form = reactive({
+  email: "admin@admin.com",
+  password: "password",
+});
+
+const { login: loginAction, errors } = useAuth();
+
+const login = async () => {
+  loginAction(form).then(() => {
+    router.push({ name: "dashboard" });
+  });
+};
 </script>
 
 <template>
@@ -13,7 +28,7 @@
     </div>
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form class="space-y-6">
+      <form @submit.prevent="login" class="space-y-6">
         <div>
           <label
             for="email"
@@ -22,13 +37,20 @@
           >
           <div class="mt-2">
             <input
+              v-model="form.email"
               id="email"
               name="email"
               type="email"
               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
-          <p class="mt-2 text-sm text-red-600" id="email-error">Error</p>
+          <p
+            v-if="errors.email"
+            class="mt-2 text-sm text-red-600"
+            id="email-error"
+          >
+            {{ errors.email[0] }}
+          </p>
         </div>
 
         <div>
@@ -40,12 +62,19 @@
           <div class="mt-2">
             <input
               id="password"
+              v-model="form.password"
               name="password"
               type="password"
               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
-          <p class="mt-2 text-sm text-red-600" id="email-error">Error</p>
+          <p
+            v-if="errors.password"
+            class="mt-2 text-sm text-red-600"
+            id="email-error"
+          >
+            {{ errors.password[0] }}
+          </p>
         </div>
 
         <div>

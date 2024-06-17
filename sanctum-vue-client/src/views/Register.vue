@@ -1,20 +1,34 @@
 <script setup>
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import useAuth from "@/composable/useAuth";
 import router from "@/router";
-import { RouterLink } from "vue-router";
+import axios from "axios";
 
 const form = reactive({
-  email: "admin@admin.com",
+  name: "John Doe",
+  email: "john@email.com",
   password: "password",
+  password_confirmation: "password",
 });
 
-const { login: loginAction, errors } = useAuth();
+const { attempt } = useAuth();
 
-const login = async () => {
-  loginAction(form).then(() => {
-    router.push({ name: "dashboard" });
-  });
+const errors = ref({});
+
+const register = async () => {
+  await axios.get("/sanctum/csrf-cookie");
+  await axios
+    .post("/register", form)
+    .then(() => {
+      attempt().then(() => {
+        router.push({ name: "dashboard" });
+      });
+    })
+    .catch((error) => {
+      if (error.response.status == 422) {
+        errors.value = error.response.data.errors;
+      }
+    });
 };
 </script>
 
@@ -24,12 +38,35 @@ const login = async () => {
       <h2
         class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
       >
-        Sign in
+        Register
       </h2>
     </div>
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form @submit.prevent="login" class="space-y-6">
+      <form @submit.prevent="register" class="space-y-6">
+        <div>
+          <label
+            for="name"
+            class="block text-sm font-medium leading-6 text-gray-900"
+            >Name</label
+          >
+          <div class="mt-2">
+            <input
+              v-model="form.name"
+              id="name"
+              name="name"
+              type="text"
+              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+          <p
+            v-if="errors.name"
+            class="mt-2 text-sm text-red-600"
+            id="email-error"
+          >
+            {{ errors.name[0] }}
+          </p>
+        </div>
         <div>
           <label
             for="email"
@@ -79,21 +116,45 @@ const login = async () => {
         </div>
 
         <div>
+          <label
+            for="password_confirmation"
+            class="block text-sm font-medium leading-6 text-gray-900"
+            >Password Confirmation</label
+          >
+          <div class="mt-2">
+            <input
+              id="password_confirmation"
+              v-model="form.password_confirmation"
+              name="password_confirmation"
+              type="password"
+              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+          <p
+            v-if="errors.password_confirmation"
+            class="mt-2 text-sm text-red-600"
+            id="email-error"
+          >
+            {{ errors.password_confirmation[0] }}
+          </p>
+        </div>
+
+        <div>
           <button
             type="submit"
             class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
-            Sign in
+            Register
           </button>
         </div>
       </form>
 
       <p class="mt-10 text-center text-sm text-gray-500">
-        Not signed up?
+        Already Registered?
         <RouterLink
-          :to="{ name: 'register' }"
+          :to="{ name: 'login' }"
           class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-          >Register</RouterLink
+          >Login</RouterLink
         >
       </p>
     </div>

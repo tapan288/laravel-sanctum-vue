@@ -5,7 +5,6 @@ import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import middlewarePipeline from "./middlewarePipeline";
 import redirectIfGuest from "@/middleware/redirectIfGuest";
-import exampleMiddleware from "@/middleware/exampleMiddleware";
 import redirectIfAuthenticated from "@/middleware/redirectIfAuthenticated";
 
 const router = createRouter({

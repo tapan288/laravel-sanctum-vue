@@ -3,9 +3,10 @@ import Home from "../views/Home.vue";
 import Dashboard from "../views/Dashboard.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
-import exampleMiddleware from "@/middleware/exampleMiddleware";
 import middlewarePipeline from "./middlewarePipeline";
 import redirectIfGuest from "@/middleware/redirectIfGuest";
+import exampleMiddleware from "@/middleware/exampleMiddleware";
+import redirectIfAuthenticated from "@/middleware/redirectIfAuthenticated";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,11 +28,17 @@ const router = createRouter({
       path: "/login",
       name: "login",
       component: Login,
+      meta: {
+        middleware: [redirectIfAuthenticated],
+      },
     },
     {
       path: "/register",
       name: "register",
       component: Register,
+      meta: {
+        middleware: [redirectIfAuthenticated],
+      },
     },
   ],
 });

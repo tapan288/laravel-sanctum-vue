@@ -7,6 +7,7 @@ export default function middlewarePipeline(context, middleware, index) {
 
   return (params) => {
     if (params) {
+      console.log(params);
       return context.next(params);
     }
 

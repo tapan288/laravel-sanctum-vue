@@ -1,4 +1,13 @@
-<script setup></script>
+<script setup>
+import useStudent from "@/composable/useStudent";
+import { onMounted } from "vue";
+
+const { fetchStudents, students } = useStudent();
+
+onMounted(async () => {
+  await fetchStudents();
+});
+</script>
 
 <template>
   <div class="py-10">
@@ -76,36 +85,36 @@
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-200 bg-white">
-                    <tr>
+                    <tr v-for="student in students" :key="student.id">
                       <td
                         class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                       >
-                        1
+                        {{ student.id }}
                       </td>
                       <td
                         class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                       >
-                        John Doe
+                        {{ student.name }}
                       </td>
                       <td
                         class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                       >
-                        somemail@gmail.com
+                        {{ student.email }}
                       </td>
                       <td
                         class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                       >
-                        Class 10
+                        {{ student.class.name }}
                       </td>
                       <td
                         class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                       >
-                        Section A
+                        {{ student.section.name }}
                       </td>
                       <td
                         class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                       >
-                        2021-09-01
+                        {{ student.created_at }}
                       </td>
 
                       <td

@@ -7,6 +7,7 @@ import middlewarePipeline from "./middlewarePipeline";
 import redirectIfGuest from "@/middleware/redirectIfGuest";
 import redirectIfAuthenticated from "@/middleware/redirectIfAuthenticated";
 import Index from "@/views/Student/Index.vue";
+import Create from "@/views/Student/Create.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +29,14 @@ const router = createRouter({
       path: "/students",
       name: "students.index",
       component: Index,
+      meta: {
+        middleware: [redirectIfGuest],
+      },
+    },
+    {
+      path: "/students/create",
+      name: "students.create",
+      component: Create,
       meta: {
         middleware: [redirectIfGuest],
       },

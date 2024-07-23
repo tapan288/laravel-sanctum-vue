@@ -1,13 +1,29 @@
 <script setup>
 import useClass from "@/composable/useClass";
-import { onMounted } from "vue";
+import useSection from "@/composable/useSection";
+import { onMounted, reactive, watch } from "vue";
 
 const { classes, fetchClasses } = useClass();
+const { sections, fetchSections } = useSection();
+
+const form = reactive({
+  name: "",
+  email: "",
+  class_id: "",
+  section_id: "",
+});
+
+watch(
+  () => form.class_id,
+  async (newValue) => {
+    if (newValue) {
+      await fetchSections(newValue);
+    }
+  }
+);
 
 onMounted(async () => {
   await fetchClasses();
-
-  console.log(classes.value);
 });
 </script>
 
@@ -35,6 +51,7 @@ onMounted(async () => {
                     >Name</label
                   >
                   <input
+                    v-bind="form.name"
                     type="text"
                     id="name"
                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm @error text-red-900 focus:ring-red-500 focus:border-red-500 border-red-300 @enderror"
@@ -49,6 +66,7 @@ onMounted(async () => {
                     >Email Address</label
                   >
                   <input
+                    v-bind="form.email"
                     type="email"
                     id="email"
                     autocomplete="email"
@@ -63,6 +81,7 @@ onMounted(async () => {
                     >Class</label
                   >
                   <select
+                    v-model="form.class_id"
                     id="class_id"
                     class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   >
@@ -84,11 +103,18 @@ onMounted(async () => {
                     >Section</label
                   >
                   <select
+                    v-model="form.section_id"
                     id="section_id"
                     class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   >
                     <option value="">Select a Section</option>
-                    <option value="1">Section A</option>
+                    <option
+                      v-for="section in sections"
+                      :key="section.id"
+                      :value="section.id"
+                    >
+                      {{ section.name }}
+                    </option>
                   </select>
                 </div>
               </div>

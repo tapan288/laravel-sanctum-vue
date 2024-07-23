@@ -3,7 +3,15 @@ import useStudent from "@/composable/useStudent";
 import { onMounted } from "vue";
 import { RouterLink } from "vue-router";
 
-const { fetchStudents, students } = useStudent();
+const { fetchStudents, students, deleteStudent } = useStudent();
+
+const deleteAction = (id) => {
+  if (confirm("Are you sure you want to delete this student?")) {
+    deleteStudent(id).then(() => {
+      students.value = students.value.filter((student) => student.id !== id);
+    });
+  }
+};
 
 onMounted(async () => {
   await fetchStudents();
@@ -131,6 +139,7 @@ onMounted(async () => {
                           Edit
                         </RouterLink>
                         <button
+                          @click="deleteAction(student.id)"
                           class="ml-2 text-indigo-600 hover:text-indigo-900"
                         >
                           Delete

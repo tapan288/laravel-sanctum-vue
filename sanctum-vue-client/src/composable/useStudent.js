@@ -43,6 +43,18 @@ export default function useStudent() {
     }
   };
 
+  const deleteStudent = async (id) => {
+    try {
+      let response = axios.delete("api/students/" + id);
+
+      return response;
+    } catch (error) {
+      console.log(error);
+
+      return Promise.reject(null);
+    }
+  };
+
   const getStudent = async (id) => {
     let response = await axios.get("api/students/" + id);
 
@@ -56,5 +68,6 @@ export default function useStudent() {
     errors,
     updateStudent,
     getStudent,
+    deleteStudent,
   };
 }

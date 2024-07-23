@@ -1,9 +1,18 @@
 <script setup>
+import Pagination from "@/components/Pagination.vue";
 import useStudent from "@/composable/useStudent";
 import { onMounted } from "vue";
 import { RouterLink } from "vue-router";
 
-const { fetchStudents, students, deleteStudent } = useStudent();
+const {
+  fetchStudents,
+  students,
+  deleteStudent,
+  metaData,
+  studentsUrl,
+  pageNumber,
+  updatedPageNumber,
+} = useStudent();
 
 const deleteAction = (id) => {
   if (confirm("Are you sure you want to delete this student?")) {
@@ -149,6 +158,10 @@ onMounted(async () => {
                   </tbody>
                 </table>
               </div>
+              <Pagination
+                :meta="metaData"
+                :updatedPageNumber="updatedPageNumber"
+              />
             </div>
           </div>
         </div>

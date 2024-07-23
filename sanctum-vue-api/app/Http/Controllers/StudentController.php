@@ -22,6 +22,8 @@ class StudentController extends Controller
     {
         $student = Student::create($request->validated());
 
-        return StudentResource::make($student);
+        return response()->json([
+            'message' => 'Student created successfully',
+        ], 201);
     }
 }

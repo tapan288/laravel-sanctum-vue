@@ -1,10 +1,13 @@
 <script setup>
 import useClass from "@/composable/useClass";
 import useSection from "@/composable/useSection";
+import useStudent from "@/composable/useStudent";
+import router from "@/router";
 import { onMounted, reactive, watch } from "vue";
 
 const { classes, fetchClasses } = useClass();
 const { sections, fetchSections } = useSection();
+const { createStudent, errors } = useStudent();
 
 const form = reactive({
   name: "",
@@ -25,13 +28,19 @@ watch(
 onMounted(async () => {
   await fetchClasses();
 });
+
+const submit = () => {
+  createStudent(form).then(() => {
+    router.push({ name: "students.index" });
+  });
+};
 </script>
 
 <template>
   <div class="mx-auto py-6 sm:px-6 lg:px-8">
     <div class="lg:grid lg:grid-cols-12 lg:gap-x-5">
       <div class="space-y-6 sm:px-6 lg:px-0 lg:col-span-12">
-        <form>
+        <form @submit.prevent="submit">
           <div class="shadow sm:rounded-md sm:overflow-hidden">
             <div class="bg-white py-6 px-4 space-y-6 sm:p-6">
               <div>
@@ -51,12 +60,18 @@ onMounted(async () => {
                     >Name</label
                   >
                   <input
-                    v-bind="form.name"
+                    v-model="form.name"
                     type="text"
                     id="name"
-                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm @error text-red-900 focus:ring-red-500 focus:border-red-500 border-red-300 @enderror"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    :class="{
+                      'text-red-900 focus:ring-red-500 focus:border-red-500 border-red-300':
+                        errors.name,
+                    }"
                   />
-                  <p class="text-red-500">This field is required</p>
+                  <p v-if="errors.name" class="mt-2 text-red-500 text-sm">
+                    {{ errors.name[0] }}
+                  </p>
                 </div>
 
                 <div class="col-span-6 sm:col-span-3">
@@ -66,12 +81,19 @@ onMounted(async () => {
                     >Email Address</label
                   >
                   <input
-                    v-bind="form.email"
+                    v-model="form.email"
                     type="email"
                     id="email"
                     autocomplete="email"
                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    :class="{
+                      'text-red-900 focus:ring-red-500 focus:border-red-500 border-red-300':
+                        errors.email,
+                    }"
                   />
+                  <p v-if="errors.email" class="mt-2 text-red-500 text-sm">
+                    {{ errors.email[0] }}
+                  </p>
                 </div>
 
                 <div class="col-span-6 sm:col-span-3">
@@ -84,6 +106,10 @@ onMounted(async () => {
                     v-model="form.class_id"
                     id="class_id"
                     class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    :class="{
+                      'text-red-900 focus:ring-red-500 focus:border-red-500 border-red-300':
+                        errors.class_id,
+                    }"
                   >
                     <option value="">Select a Class</option>
                     <option
@@ -94,6 +120,9 @@ onMounted(async () => {
                       {{ item.name }}
                     </option>
                   </select>
+                  <p v-if="errors.class_id" class="mt-2 text-red-500 text-sm">
+                    {{ errors.class_id[0] }}
+                  </p>
                 </div>
 
                 <div class="col-span-6 sm:col-span-3">
@@ -106,6 +135,10 @@ onMounted(async () => {
                     v-model="form.section_id"
                     id="section_id"
                     class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    :class="{
+                      'text-red-900 focus:ring-red-500 focus:border-red-500 border-red-300':
+                        errors.section_id,
+                    }"
                   >
                     <option value="">Select a Section</option>
                     <option
@@ -116,6 +149,9 @@ onMounted(async () => {
                       {{ section.name }}
                     </option>
                   </select>
+                  <p v-if="errors.section_id" class="mt-2 text-red-500 text-sm">
+                    {{ errors.section_id[0] }}
+                  </p>
                 </div>
               </div>
             </div>

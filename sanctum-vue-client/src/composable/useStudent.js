@@ -17,7 +17,6 @@ export default function useStudent() {
 
   const createStudent = async (form) => {
     try {
-      console.log(form);
       let response = await axios.post("api/students", form);
 
       return response;
@@ -30,5 +29,32 @@ export default function useStudent() {
     }
   };
 
-  return { fetchStudents, students, createStudent, errors };
+  const updateStudent = async (id, form) => {
+    try {
+      let response = await axios.put("api/students/" + id, form);
+
+      return response;
+    } catch (error) {
+      if (error.response.status == 422) {
+        errors.value = error.response.data.errors;
+      }
+
+      return Promise.reject(null);
+    }
+  };
+
+  const getStudent = async (id) => {
+    let response = await axios.get("api/students/" + id);
+
+    return response.data;
+  };
+
+  return {
+    fetchStudents,
+    students,
+    createStudent,
+    errors,
+    updateStudent,
+    getStudent,
+  };
 }

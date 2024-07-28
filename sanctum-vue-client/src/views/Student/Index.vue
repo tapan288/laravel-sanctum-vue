@@ -1,4 +1,5 @@
 <script setup>
+import MagnifyingGlass from "@/components/MagnifyingGlass.vue";
 import Pagination from "@/components/Pagination.vue";
 import useStudent from "@/composable/useStudent";
 import { onMounted } from "vue";
@@ -12,6 +13,7 @@ const {
   studentsUrl,
   pageNumber,
   updatedPageNumber,
+  search,
 } = useStudent();
 
 const deleteAction = (id) => {
@@ -46,6 +48,25 @@ onMounted(async () => {
             >
               Add Student
             </RouterLink>
+          </div>
+        </div>
+
+        <div class="flex flex-col justify-start sm:flex-row mt-6">
+          <div class="relative text-sm text-gray-800 col-span-3">
+            <div
+              class="absolute pl-2 left-0 top-0 bottom-0 flex items-center pointer-events-none text-gray-500"
+            >
+              <MagnifyingGlass />
+            </div>
+
+            <input
+              v-model="search"
+              type="text"
+              autocomplete="off"
+              placeholder="Search students data..."
+              id="search"
+              class="block rounded-lg border-0 py-2 pl-10 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
           </div>
         </div>
 

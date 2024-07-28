@@ -5,12 +5,17 @@ export default function useStudent() {
   let students = ref({}),
     errors = ref({}),
     metaData = ref({}),
+    search = ref(""),
     pageNumber = ref(1);
 
   let studentsUrl = computed(() => {
     let url = new URL("http://sanctum-vue-api.test/api/students");
 
     url.searchParams.append("page", pageNumber.value);
+
+    if (search.value) {
+      url.searchParams.append("search", search.value);
+    }
 
     return url;
   });
@@ -21,8 +26,6 @@ export default function useStudent() {
 
       students.value = response.data.data;
       metaData.value = response.data.meta;
-
-      console.log(metaData.value);
     } catch (error) {
       console.log(error);
     }
@@ -85,6 +88,15 @@ export default function useStudent() {
     }
   );
 
+  watch(
+    () => search.value,
+    (newValue) => {
+      if (newValue) {
+        pageNumber.value = 1;
+      }
+    }
+  );
+
   return {
     fetchStudents,
     students,
@@ -97,5 +109,6 @@ export default function useStudent() {
     studentsUrl,
     pageNumber,
     updatedPageNumber,
+    search,
   };
 }

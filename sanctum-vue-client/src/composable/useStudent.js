@@ -6,6 +6,7 @@ export default function useStudent() {
     errors = ref({}),
     metaData = ref({}),
     search = ref(""),
+    class_id = ref(""),
     pageNumber = ref(1);
 
   let studentsUrl = computed(() => {
@@ -15,6 +16,10 @@ export default function useStudent() {
 
     if (search.value) {
       url.searchParams.append("search", search.value);
+    }
+
+    if (class_id.value) {
+      url.searchParams.append("class_id", class_id.value);
     }
 
     return url;
@@ -110,5 +115,6 @@ export default function useStudent() {
     pageNumber,
     updatedPageNumber,
     search,
+    class_id,
   };
 }

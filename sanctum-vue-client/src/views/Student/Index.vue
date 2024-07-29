@@ -1,6 +1,7 @@
 <script setup>
 import MagnifyingGlass from "@/components/MagnifyingGlass.vue";
 import Pagination from "@/components/Pagination.vue";
+import useClass from "@/composable/useClass";
 import useStudent from "@/composable/useStudent";
 import { onMounted } from "vue";
 import { RouterLink } from "vue-router";
@@ -14,7 +15,10 @@ const {
   pageNumber,
   updatedPageNumber,
   search,
+  class_id,
 } = useStudent();
+
+const { classes, fetchClasses } = useClass();
 
 const deleteAction = (id) => {
   if (confirm("Are you sure you want to delete this student?")) {
@@ -26,6 +30,7 @@ const deleteAction = (id) => {
 
 onMounted(async () => {
   await fetchStudents();
+  await fetchClasses();
 });
 </script>
 
@@ -68,6 +73,15 @@ onMounted(async () => {
               class="block rounded-lg border-0 py-2 pl-10 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
+          <select
+            v-model="class_id"
+            class="block rounded-lg border-0 py-2 ml-5 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+          >
+            <option value="">Filter By Class</option>
+            <option v-for="item in classes" :key="item.id" :value="item.id">
+              {{ item.name }}
+            </option>
+          </select>
         </div>
 
         <div class="mt-8 flex flex-col">
